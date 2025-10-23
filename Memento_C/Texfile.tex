@@ -1,0 +1,837 @@
+\documentclass[a3paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lipsum} % pour l'exemple
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{top=1.5cm, bottom=1.5cm, left=0.75cm, right=0.75cm}
+
+% --- Packages nécessaires ---
+\usepackage[most]{tcolorbox} % charge les modules nécessaires, dont raster
+\tcbuselibrary{raster,skins,breakable} % <- indispensable pour tcbraster
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\definecolor{turquoise}{RGB}{86, 150, 218}
+\definecolor{lightpurple}{RGB}{164,136,241}
+\definecolor{orchidpink}{RGB}{234,135,180}
+\definecolor{tale}{RGB}{83,174,162}
+\definecolor{palegreen}{RGB}{115,176,108}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{center}
+    \vspace*{-1.5cm} % Ajuste la position verticale du titre
+    {\LARGE \@title \par}
+    \vspace{0.5em}
+    {\large \@author \par}
+    \vspace{0.5em}
+    {\small \@date \par}
+    \vspace{1em}
+  \end{center}
+}
+\makeatother
+\title{{\Huge \textbf{Mémento langage C}}}
+\date{}
+\begin{document}
+
+\maketitle
+\vspace*{-1.5em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[title=Types de base, fonttitle=\large, top=0pt, bottom=5pt, boxsep=1pt, colback=white,
+  colframe=blue!90!black, 
+  colbacktitle=blue!90!black,
+  coltitle=white,]
+  
+\vspace{0.5em}
+\subsection*{{\small \underline{Primitifs}}}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Type} & \textbf{Description} & \textbf{Exemple}\\
+\hline
+int & Entier & \lstinline|int a =5;| \\
+\hline
+float & Nombre réel en virgule flottante & \lstinline|float x = 3.14;|\\
+\hline
+double & Nombre réel (~15 chiffres significatifs) & \lstinline|double y = 2.718;|\\
+\hline
+char & Caractère & \lstinline|char c = 'A';|\\
+\hline
+\end{tabular}
+
+\subsection*{{\small \underline{Qualificateurs}}}
+\begin{itemize}
+\item short : entier court (\lstinline|short int|)
+\item long : entier long (\lstinline|long int|)
+\item signed : entier signé (valeurs positives et négatives)
+\item unsigned : entier non signé (valeurs positives uniquement)
+\end{itemize}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Variables, fonttitle=\large, top=0pt, bottom=3pt, boxsep=1pt, colback=white,
+  colframe=palegreen, 
+  colbacktitle=palegreen,
+  coltitle=white,]
+  
+\vspace{0.5em}
+\subsection*{{\small \underline{Afficher le contenu d'une variable }}}
+\vspace{-0.5em}
+\begin{lstlisting}[language=C,showstringspaces=false]
+int nombreDeVies=4;
+printf("Il vous reste %d vies",nombreDeVies);
+\end{lstlisting}
+
+\begin{tabular}{|l|p{4cm}|}
+\hline
+\textbf{Format} & \textbf{Type attendu}\\
+\hline
+$\%$d & \lstinline|int|\\
+\hline
+$\%$f & \lstinline|float|\\
+\hline
+$\%$c & \lstinline|char|\\
+\hline
+$\%$s & \lstinline|char[ ]| ou \lstinline|char*|\\
+\hline
+$\%$u & unsigned int\\
+\hline
+$\%$ld & \lstinline|long|\\
+\hline
+$\%$x & \lstinline|hex|\\
+\hline
+\end{tabular}
+\vspace{-0.5em}
+\subsection*{{\small \underline{Lire le contenu d'une variable }}}
+\vspace{-0.5em}
+\begin{lstlisting}[language=C,showstringspaces=false]
+float rayon, aire;
+printf("Quelle est la longueur du rayon ?");
+scanf("%f", &rayon);
+aire = 3.14*rayon*rayon;
+printf("Aire du cercle: %f",aire);
+\end{lstlisting}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Nombres complexes, fonttitle=\large, top=0pt, bottom=5pt, boxsep=1pt, colback=white,
+  colframe=turquoise, 
+  colbacktitle=turquoise,
+  coltitle=white,]
+  
+\vspace{0.5em}
+\subsection*{{\small \underline{Écriture }}}
+\begin{itemize}
+\item Inclusion bibliothèque : \lstinline|#include <complex.h>|
+
+\item Déclaration: \lstinline|double complex z = 1.0+2.0*I;|
+
+\end{itemize}
+
+\vspace{-1.1em}
+\subsection*{{\small \underline{Fonctions utiles}}}
+
+\begin{tabular}{|l|l|}
+\hline
+\begin{minipage}[t]{7.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=5pt]
+double real = creal(z)
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Partie réelle de z\\
+\hline
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=5pt]
+double real = cimag(z)
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Partie imaginaire de z\\
+\hline
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=5pt]
+absval = cabs(z);
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Module de z\\
+\hline
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=5pt]
+double complex conjz = conj(z);
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Conjugué de z\\
+\hline
+\end{tabular}
+\vspace{0.05em}
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[title=Fonctions, fonttitle=\large, top=10pt, bottom=6.8pt, boxsep=1pt, colback=white,
+  colframe=orchidpink, 
+  colbacktitle=orchidpink,
+  coltitle=white,]
+  \vspace{-0.25em}
+\subsection*{{\small \underline{Structure}}}
+\vspace{-0.5em}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=0pt, belowskip=0pt]
+type_retour nom_fonction(type1 param1, ...) {
+    // instructions
+    return valeur;// si type_retour!= void
+}
+\end{lstlisting}
+\vspace{-0.75em}
+\subsection*{{\small \underline{Appel de la fonction}}}
+- La définition de la fonction se fait avant le \textit{main}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=0pt]
+int addition(int a, int b) {
+    return a + b;
+}
+int main() {
+    int resultat = addition(5, 3);
+    printf("%d", resultat);
+    return 0;
+}
+\end{lstlisting}
+\vspace{-1.15em}
+\subsection*{{\small \underline{Fonction récursive}}}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=0pt, belowskip=0pt]
+int factorielle(int n) {
+    if (n <= 1) return 1;
+    return n * factorielle(n - 1);
+}
+\end{lstlisting}
+\end{tcolorbox}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[title=Opérations de base, fonttitle=\large, top=0pt, bottom=3pt, boxsep=1pt,
+colback=white,
+  colframe=pink!80!white,, 
+  colbacktitle=pink!80!white,
+  coltitle=white,]
+\vspace{0.5em}
+\subsection*{{\small \underline{Opérateurs arithmétiques}}}
+
+\begin{tabular}{|c|c|p{7cm}|}
+\hline
+\textbf{Symbole} & \textbf{Opération} & \textbf{Exemple} \\
+\hline
++ & Addition & 
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=20pt]
+int a=10, b=4;
+int somme = a+b;//14
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage} \\
+\hline
+- & Soustraction & 
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=20pt]
+int a=10, b=4;
+int difference = a-b;//6
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage} \\
+\hline
+* & Multiplication & 
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=20pt]
+int a=10, b=4;
+int produit = a*b;//40
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage} \\
+\hline
+/ & Division & 
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=20pt]
+int a=10, b=4;
+float c=10.0, b=4.0;
+int quotient_1 = a/b;//2
+float quotient_2 = c/b;//2.5
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage} \\
+\hline
+$\%$ & Modulo & 
+\begin{minipage}[t]{6.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\normalsize , aboveskip=5pt, belowskip=20pt]
+int a=10, b=4;
+int reste = a % b;//2
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage} \\
+\hline
+\end{tabular}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Conditions, fonttitle=\large, top=0pt, bottom=3pt, boxsep=1pt,colback=white,
+  colframe=black!50, 
+  colbacktitle=black!50,
+  coltitle=white,]
+\vspace{0.5em}
+\subsection*{{\small \underline{Condition simple}}}
+\vspace{-0.5em}
+\begin{lstlisting}[language=C,showstringspaces=false]
+if(nombreDeVies==0){
+  printf("Game Over");}
+else{
+  printf("Il vous reste %d vies", nombreDeVies);}
+\end{lstlisting}
+\vspace{-1em}
+\subsection*{{\small \underline{Plusieurs conditions à la fois}}}
+\begin{tabular}{|l|p{4cm}|}
+\hline
+\textbf{Symbole} & \textbf{Signification}\\
+\hline
+$\&\&$ & ET logique\\
+\hline
+|| & OU logique\\
+\hline
+! & NON logique\\
+\hline
+\end{tabular}
+\begin{lstlisting}[language=C,showstringspaces=false]
+if(b<a && b>4){
+  c=0;}
+else{
+  c=7*a+b;}
+printf("c = %d",c);
+\end{lstlisting}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Boucles, fonttitle=\large, top=3pt, bottom=3pt, boxsep=1pt, colback=white,
+  colframe=lightpurple, 
+  colbacktitle=lightpurple,
+  coltitle=white,]
+  
+- L’instruction  \textbf{break}  permet d'arrêter l’exécution d’une boucle\\
+
+- L’instruction  \textbf{continue}  permet de passer directement à l’itération suivante sans exécuter les lignes de l’itération courante
+\subsection*{{\small \underline{Boucle while}}}
+- Tant que la condition est vraie, on répète les instructions entre\\ accolades
+\begin{lstlisting}[language=C,showstringspaces=false]
+int compteur = 0;
+while (compteur < 10)
+{
+    printf("Bienvenue sur OpenClassrooms !\n");
+    compteur++;
+}
+\end{lstlisting}
+\vspace{-1em}
+\subsection*{{\small \underline{Boucle do...while}}}
+- Cette boucle s'exécutera toujours au moins une fois car le test se fait à la fin
+
+\begin{lstlisting}[language=C,showstringspaces=false]
+int compteur = 0;
+do
+{
+    printf("Bienvenue sur OpenClassrooms !\n");
+    compteur++;
+} while (compteur < 10);
+\end{lstlisting}
+\vspace{-1em}
+\subsection*{{\small \underline{Boucle for}}}
+\vspace{-1em}
+\begin{lstlisting}[language=C,showstringspaces=false]
+int compteur;
+for (compteur = 0 ; compteur < 10 ; compteur++)
+{
+    printf("Bienvenue sur OpenClassrooms !\n");
+}
+\end{lstlisting}
+
+\end{tcolorbox}
+\end{minipage}
+
+\newpage
+\noindent
+\begin{minipage}[t]{0.5\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[title=Pointeurs, fonttitle=\large, top=0pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=tale, 
+  colbacktitle=tale,
+  coltitle=white,]
+  \vspace{0.5em}
+  \textbf{Pointeur} = variable qui contient l’adresse mémoire d’une autre variable
+\vspace{-2em}
+\subsection*{{\small \underline{Déclaration}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+int *p;
+int x = 10;
+int *p = &x;
+\end{lstlisting}
+\end{minipage}%
+\hspace{4em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{pointeur vers une entier}\\
+\textit{p contient adresse de x}
+\end{minipage}
+\vspace{-1.5em}
+\subsection*{{\small \underline{Afficher contenu d'un pointeur}}}
+\noindent
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=20pt]
+int age = 10;
+int *pointeurSurAge = &age;
+//Afficher adresse de age :
+printf("%d", pointeurSurAge);
+//Afficher valeur stockee dans adresse de age :
+printf("%d", *pointeurSurAge);
+\end{lstlisting}
+\vspace{-1.5em}
+  \end{tcolorbox}
+  
+  \begin{tcolorbox}[title=Tableaux, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=blue!40!black!50, 
+  colbacktitle=blue!40!black!50,
+  coltitle=white]
+  \subsection*{{\small \underline{Déclaration}}}
+  \vspace{-1.25em}
+  \noindent
+\begin{minipage}[t]{0.5\textwidth} 
+  \begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+int notes[5];
+int tab[3] = {1,2,3};
+float moyennes[] = {12.5,14.0};
+  \end{lstlisting}
+  \end{minipage}%
+\hspace{4em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{déclaration simple}\\
+\textit{déclaration et initialisation}\\
+\textit{taille non précisée}
+\end{minipage}
+  \vspace{-1.25em}
+\subsection*{{\small \underline{Acccès aux éléments}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+notes[0] = 15;
+printf("%d",notes[0]);
+\end{lstlisting}
+\end{minipage}%
+\hspace{4em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{les indices commencent à 0}
+\end{minipage}
+\vspace{-1.25em}
+\subsection*{{\small \underline{Tableau et pointeurs}}}
+- Un tableau agit comme un pointeur constant vers son premier élément (tab[i] $\Leftrightarrow$ *(tab + i))\\
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=-4pt, belowskip=0pt]
+int *p = tab;
+\end{lstlisting}
+\end{minipage}%
+\hspace{4em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{-2pt}
+\textit{équivaut à }p = \& tab[0]
+\end{minipage}
+
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=Matrices, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=blue!55!cyan, 
+  colbacktitle=blue!55!cyan,
+  coltitle=white,]
+  \subsection*{{\small \underline{Déclaration}}}
+  \vspace{-1.25em}
+  \noindent
+\begin{minipage}[t]{0.5\textwidth} 
+  \begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+int matrice[2][3] = {
+    {1, 2, 3},
+    {4, 5, 6}
+};
+  \end{lstlisting}
+  \end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{2 lignes et 3 colonnes}
+\end{minipage}
+  \vspace{-1em}
+\subsection*{{\small \underline{Accès aux éléments}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+matrice[i][j] = 10;
+int x = matrice[1][2];
+\end{lstlisting}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{modifie élément}\\
+ \textit{récupère élément}
+\end{minipage}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=Manipulation de fichiers, fonttitle=\large, top=5.5pt, bottom=5pt, boxsep=1pt, colback=white,
+  colframe=orange!50!black!40, 
+  colbacktitle=orange!50!black!40,
+  coltitle=white,]
+
+  - Utilisation de la bibliothèque standard <stdio.h>
+  \vspace{-1.25em}
+\subsection*{{\small \underline{Ouverture et fermeture d'un fichier}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+FILE *fichier;
+fichier=fopen("nom_du_fichier.txt","mode");
+fclose(fichier);
+\end{lstlisting}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{pointeur vers fichier}
+\end{minipage}
+  \vspace{-0.75em}
+\subsection*{{\small \underline{Modes}}}
+\begin{tabular}{|l|l|p{7.77cm}|}
+\hline
+\textbf{Mode} & \textbf{Signification} & \textbf{Condition}\\
+\hline
+"r" & Lecture seule & Le fichier doit exister\\
+\hline
+"w" & Écriture seule & Écrase le contenu s’il existe, sinon crée\\
+\hline
+"a"	& Ajout (append) & Ajoute à la fin du fichier, sinon crée\\
+\hline
+"r+" & Lecture/écriture	& Le fichier doit exister\\
+\hline
+"w+"	 & Lecture/écriture &	Écrase ou crée\\
+\hline
+"a+" & 	Lecture/écriture & 	Ajoute à la fin, crée si inexistant\\
+\hline
+\end{tabular}
+\vspace{-1em}
+\subsection*{{\small\underline{Lecture et écriture}}}
+\begin{tabular}{|c|l|}
+\hline
+Écriture &
+\begin{minipage}[t]{0.4\textwidth}
+\vspace{-0.5em} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+fprintf(f,"A:%d,i:%c\n",a,i);
+fputs("...",f);
+fputc('A', f);
+\end{lstlisting}
+\end{minipage}%
+\hspace{6em}
+\begin{minipage}[t]{0.23\textwidth}
+\vspace{-0.25em}
+\textit{chaîne formatée}\\
+\textit{chaîne simple}\\
+\textit{caractère}
+\end{minipage}\\[0.25em]
+\hline
+Lecture & \begin{minipage}[t]{0.4\textwidth}
+\vspace{-0.5em} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+fscanf(f,"%s %d", nom, &age);
+fgets(ligne,100,f);
+char c = fgetc(f);
+\end{lstlisting}
+\end{minipage}%
+\hspace{6em}
+\begin{minipage}[t]{0.23\textwidth}
+\vspace{-0.25em}
+\textit{chaîne formatée}\\
+\textit{ligne entière}\\
+\textit{caractère}
+\end{minipage}\\
+\hline
+\end{tabular}
+\vspace{-1.25em}
+\subsection*{{\small\underline{Fonctions utiles}}}
+\begin{tabular}{|l|p{4cm}|}
+\hline
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+remove("fichier.txt")
+\end{lstlisting}
+& Supprime un fichier
+\\[0.25em]
+\hline
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+rename("ancien.txt","nouveau.txt")
+\end{lstlisting}
+& Renomme un fichier
+\\[0.25em]
+\hline
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+fseek(f, position, origine)
+\end{lstlisting}
+& Déplace curseur
+\\[0.25em]
+\hline
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+ftell(f)
+\end{lstlisting}
+& Donne $(x;y)$ curseur
+\\[0.25em]
+\hline
+\end{tabular}
+  \end{tcolorbox}
+  
+  
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.49\textwidth}
+\vspace{0pt}
+  \begin{tcolorbox}[title=Structures, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=blue!45!black, 
+  colbacktitle=blue!45!black,
+  coltitle=white,]
+  \subsection*{{\small \underline{Déclaration}}}
+  \vspace{-0.5em}
+  \noindent
+  \begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+struct Etudiant {
+    char nom[50];
+    int age;
+    float moyenne;
+};
+  \end{lstlisting}
+  \vspace{-1em}
+\subsection*{{\small \underline{Initialisation}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+struct Etudiant e1;
+struct Etudiant e2 = {"Alice",20,14.5};
+\end{lstlisting}
+\end{minipage}%
+\hspace{9em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+ \textit{déclaration}\\
+ \textit{initialisation}
+\end{minipage}
+\vspace{-1em}
+\subsection*{{\small \underline{Accès aux éléments}}}
+\vspace{-1.25em}
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+struct Etudiant *ptr = &e1;
+printf("%f", ptr->moyenne);
+printf("%s", e2.nom);
+e1.age = 21;
+\end{lstlisting}
+\end{minipage}%
+\hspace{6em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+ \textit{ $->$ pour pointeur}\\
+ \textit{. pour variable}
+\end{minipage}
+\vspace{-1em}
+\subsection*{{\small \underline{Tableau de structures}}}
+\vspace{-1.25em}
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, showstringspaces=false, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+struct Etudiant tab[3] = {
+    {"Alice", 20, 14.5},
+    {"Bob", 22, 13.2},
+    {"Clara", 19, 15.8}
+};
+printf("%s : %.2f\n", tab[3].nom, tab[3].moyenne);
+\end{lstlisting}
+\end{minipage}%
+\hspace{6em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+ \textit{renvoie "Bob : 15.8"}
+\end{minipage}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=Chaînes de caractères, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe= orange!30!pink, 
+  colbacktitle=orange!30!pink,
+  coltitle=white,]
+  
+\textbf{Chaîne de caractères} = tableau de char terminé par le caractère \verb|\0|
+\vspace{-1.5em}
+\subsection*{{\small \underline{Déclaration et initialisation}}}
+\vspace{-1.25em}
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt]
+char mot[10];
+char nom[] = "Alice";
+char prenom[20] = "Bob";
+\end{lstlisting}
+\end{minipage}%
+\hspace{1em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{chaîne vide}\\
+\textit{taille déduite automatiquement}\\
+\textit{taille fixe}
+\end{minipage}
+\vspace{-0.5em}
+\subsection*{{\small \underline{Fonctions utiles}}}
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Fonction} & \textbf{Description} \\
+\hline
+\begin{minipage}[t]{1.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\small , aboveskip=5pt, belowskip=5pt]
+strlen
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Renvoie la longueur d’une chaîne sans \verb|\0|\\
+\hline
+\begin{minipage}[t]{1.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\small , aboveskip=5pt, belowskip=5pt]
+strcpy
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Copie une chaîne dans une autre\\
+\hline
+\begin{minipage}[t]{1.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\small , aboveskip=5pt, belowskip=5pt]
+strncpy
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Copie jusqu’à n caractères\\
+\hline
+\begin{minipage}[t]{1.5cm}
+\vspace{-\baselineskip}
+\begin{lstlisting}[language=C, basicstyle=\small , aboveskip=5pt, belowskip=5pt]
+strcmp
+\end{lstlisting}
+\vspace{-\baselineskip}
+\end{minipage}
+& Compare deux chaînes (0 si égales)\\
+\hline
+\end{tabular}
+\vspace{-0.3em}
+\subsection*{{\small \underline{Chaînes et pointeurs}}}
+\vspace{-0.3em}
+- Les chaînes de caractères peuvent être manipulées via un pointeur mais ne doivent pas être modifiées via ces derniers
+
+\begin{minipage}[t]{0.5\textwidth}
+\begin{lstlisting}[language=C, basicstyle=\small , aboveskip=5pt, belowskip=5pt]
+char *s = "Hello";
+printf("%c\n", *(s+1));
+\end{lstlisting}
+\end{minipage}%
+\hspace{1em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{affiche le caractère 'e'}
+\end{minipage}
+  \end{tcolorbox}
+  
+  \begin{tcolorbox}[title=Booléens, fonttitle=\large, top=5pt, bottom=5pt, boxsep=1pt, colback=white,
+  colframe=black, 
+  colbacktitle=black,
+  coltitle=white,]
+  \subsection*{{\small\underline{Déclaration}}}
+- Définis dans la bibliothèque <stdbool.h>
+
+\begin{minipage}[t]{0.5\textwidth} 
+  \begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=-4pt, belowskip=0pt]
+#include <stdbool.h>
+_Bool b1;  
+bool b2;  
+  \end{lstlisting}
+  \end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{1.15em}
+\textit{type natif C, valeur 0 ou 1}\\
+\textit{type bool fourni par <stdbool.h>}
+\end{minipage}
+  \vspace{-0.75em}
+  \subsection*{{\small \underline{Afficher booléen}}}
+\vspace{-1em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+bool a = true;
+printf("a=%d\n", a);
+printf("a=%s\n", a ? "true":"false");
+\end{lstlisting}
+\end{minipage}%
+\hspace{7.5em}
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{1.3em}
+\textit{affiche 1}\\
+ \textit{affiche a=true}
+\end{minipage}
+\vspace{-1em}
+\subsection*{{\small \underline{Conditions et boucles}}}
+\vspace{-1.25em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth} 
+\begin{lstlisting}[language=C, basicstyle=\normalsize, aboveskip=0pt, belowskip=0pt,showstringspaces=false]
+while(a) {
+ if (a) {...
+} else {...
+}
+...
+}
+\end{lstlisting}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\vspace{0.15em}
+\textit{tant que a=true}\\
+\textit{si a=true}
+\end{minipage}
+\vspace{-0.5em}
+\subsection*{{\small \underline{Portes logiques}}}
+\begin{tabular}{|l|p{4cm}|}
+\hline
+\textbf{Symbole} & \textbf{Porte}\\
+\hline
+\&\& & ET\\
+\hline
+|| & OU\\
+\hline
+! & NON\\
+\hline
+\^{} & OU exclusif\\
+\hline
+
+\end{tabular}
+  \end{tcolorbox}
+  
+  \end{minipage}
+
+\end{document}
