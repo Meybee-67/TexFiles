@@ -1,0 +1,200 @@
+% Fiche sur le polymorphisme en C++
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{center}
+    \vspace*{-1.5cm} % Ajuste la position verticale du titre
+    {\LARGE \@title \par}
+    \vspace{0.5em}
+    {\large \@author \par}
+    \vspace{0.5em}
+    {\small \@date \par}
+    \vspace{1em}
+  \end{center}
+}
+\makeatother
+\title{{\Huge \textbf{Polymorphisme en C++}}}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace*{-3em}
+\section*{Définition}
+Le polymorphisme en C++ permet de manipuler des objets dérivés à travers des références ou pointeurs vers leur classe de base. Cela repose principalement sur :
+\begin{itemize}
+    \item les fonctions virtuelles,
+    \item l'héritage,
+    \item le mécanisme de liaison dynamique (\textit{dynamic dispatch}).
+\end{itemize}
+
+\section*{Fonctions virtuelles}
+Une fonction marquée avec le mot-clé \texttt{virtual} peut être redéfinie dans les classes dérivées.
+
+\begin{lstlisting}[language=C++]
+class Vehicule {
+public:
+    virtual void demarrer() const {
+        cout << "Le vehicule demarre" << endl;
+    }
+};
+
+class Voiture : public Vehicule {
+public:
+    void demarrer() const override {
+        cout << "La voiture demarre" << endl;
+    }
+};
+
+class Moto : public Vehicule {
+public:
+    void demarrer() const override {
+        cout << "La moto demarre" << endl;
+    }
+};
+\end{lstlisting}
+
+\section*{Polymorphisme dynamique}
+Utilisation d'un pointeur ou d'une référence vers la classe de base pour appeler la version redéfinie.
+
+\begin{lstlisting}[language=C++]
+Vehicule* v = new Moto();
+v->demarrer(); // Appelle Moto::demarrer() grece au polymorphisme;
+\end{lstlisting}
+
+\section*{Classe abstraite et fonctions virtuelles pures}
+Une fonction virtuelle pure rend la classe abstraite et impose sa redéfinition.
+
+\begin{lstlisting}[language=C++]
+class Vehicule {
+public:
+    virtual void info() const = 0; // Fonction virtuelle pure
+};
+
+class Voiture : public Vehicule {
+public:
+    void info() const override {
+        cout << "Ceci est une voiture" << endl;
+    }
+};
+
+class Moto : public Vehicule {
+public:
+    void info() const override {
+        cout << "Ceci est une moto" << endl;
+    }
+};
+
+\end{lstlisting}
+
+\section*{Destructeurs virtuels}
+Toujours utiliser un destructeur \texttt{virtual} dans une classe destinée à être utilisée polymorphiquement.
+
+\begin{lstlisting}[language=C++]
+class Base {
+public:
+    virtual ~Base() {}
+};
+\end{lstlisting}
+\newpage
+\begin{center}
+\section*{\Huge \textbf{Stockage d'éléments en C++}}
+\end{center}
+\vspace*{0.5em}
+\section*{Introduction}
+Le stockage d'éléments en C++ repose en grande partie sur la bibliothèque standard (STL). Le conteneur le plus utilisé pour stocker des collections d'éléments est \texttt{std::vector}, qui représente un tableau dynamique.
+
+
+\section*{Caractéristiques de \texttt{std::vector}}
+\begin{itemize}
+\item Tableau dynamique redimensionnable automatiquement.
+\item Accès en temps constant (O(1)) aux éléments par indice.
+\item Stockage contigu en mémoire.
+\item Compatible avec les algorithmes de la STL.
+\end{itemize}
+
+
+\section*{Déclaration et initialisation}
+\begin{lstlisting}[language=C++]
+#include <vector>
+
+
+std::vector<int> v1; // Vide
+std::vector<int> v2(5); // 5 elements initialises a 0
+std::vector<int> v3 = {1, 2, 3}; // Initialisation par liste
+\end{lstlisting}
+
+
+\section*{Ajout et suppression d'éléments}
+\begin{lstlisting}[language=C++]
+std::vector<int> v;
+v.push_back(10); // Ajout en fin
+v.push_back(20);
+
+
+v.pop_back(); // Retire le dernier element
+\end{lstlisting}
+
+
+\section*{Accès aux éléments}
+\begin{lstlisting}[language=C++]
+int x = v[0]; // Acces sans verification
+int y = v.at(1); // Acces avec verification (exceptions)
+\end{lstlisting}
+
+
+\section*{Boucles et itérateurs}
+\begin{lstlisting}[language=C++]
+for (size_t i = 0; i < v.size(); ++i) {
+std::cout << v[i] << std::endl;
+}
+
+
+for (int x : v) { // Boucle for-range
+std::cout << x << std::endl;
+}
+
+
+for (auto it = v.begin(); it != v.end(); ++it) {
+std::cout << *it << std::endl;
+}
+\end{lstlisting}
+
+
+\section*{Capacité et gestion mémoire}
+\begin{itemize}
+\item \texttt{size()} : nombre d'éléments contenus
+\item \texttt{capacity()} : capacité allouée
+\item \texttt{reserve(n)} : réserve de la mémoire pour éviter les réallocations
+\item \texttt{shrink\_to\_fit()} : réduit la capacité si possible
+\end{itemize}
+
+
+\begin{lstlisting}[language=C++]
+std::vector<int> v;
+v.reserve(100); // Optimisation
+\end{lstlisting}
+
+
+\section*{Effacement}
+\begin{lstlisting}[language=C++]
+v.erase(v.begin() + 2); // Efface un element
+v.erase(v.begin(), v.begin() + 3); // Efface une plage
+v.clear(); // Vide le vector
+\end{lstlisting}
+
+
+\section*{Remplacement par d'autres conteneurs}
+Selon les besoins :
+\begin{itemize}
+\item \texttt{std::array} : taille fixe
+\end{itemize}
+
+\end{document}
