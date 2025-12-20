@@ -1,1 +1,41 @@
+\documentclass[a3paper,12pt]{article}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lipsum} % pour l'exemple
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{top=1.5cm, bottom=1.5cm, left=0.75cm, right=0.75cm}
+
+% --- Packages nécessaires ---
+\usepackage[most]{tcolorbox} % charge les modules nécessaires, dont raster
+\tcbuselibrary{raster,skins,breakable} % <- indispensable pour tcbraster
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+
+\definecolor{turquoise}{RGB}{86, 150, 218}
+\definecolor{lightpurple}{RGB}{164,136,241}
+\definecolor{orchidpink}{RGB}{234,135,180}
+\definecolor{tale}{RGB}{83,174,162}
+\definecolor{palegreen}{RGB}{115,176,108}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{center}
+    \vspace*{-1.5cm} % Ajuste la position verticale du titre
+    {\LARGE \@title \par}
+    \vspace{0.5em}
+    {\large \@author \par}
+    \vspace{0.5em}
+    {\small \@date \par}
+    \vspace{1em}
+  \end{center}
+}
+\makeatother
+\title{{\Huge \textbf{Mémento langage C}}}
+\date{}
+\begin{document}
+
+\end{document}
