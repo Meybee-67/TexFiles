@@ -24,7 +24,7 @@
 \makeatletter
 \renewcommand{\maketitle}{
   \begin{center}
-    \vspace*{-1.5cm} % Ajuste la position verticale du titre
+    \vspace*{-1.75cm} % Ajuste la position verticale du titre
     {\LARGE \@title \par}
     \vspace{0.5em}
     {\large \@author \par}
@@ -38,7 +38,7 @@
 \date{}
 \begin{document}
 \maketitle
-\vspace*{-1.5em}
+\vspace*{-2em}
 \noindent
 \begin{minipage}[t]{0.5\textwidth}
 \vspace{0pt}
@@ -51,8 +51,11 @@
 \subsection*{{\small \underline{Définitions}}}
 \begin{itemize}
     \item \textbf{Encapsulation} = regrouper données et fonctions dans une classe\\
-    \item \textbf{Abstraction} = simplifier la complexité en masquant les détails\\
-    \item \textbf{Héritage} = réutiliser le code d'une autre classe\\
+\vspace{-0.75em}
+    \item \textbf{Abstraction} = simplifier la complexité en masquant les détails
+\vspace{0.3em}
+    \item \textbf{Héritage} = réutiliser le code d'une autre classe
+\vspace{0.3em}
     \item \textbf{Polymorphisme} = utiliser une même interface pour plusieurs formes d’implémentation
 \end{itemize}
 \end{tcolorbox}
@@ -84,11 +87,76 @@
 \end{tabular}
 \end{tcolorbox}
 
-\begin{tcolorbox}[title=Séparation des fichiers, fonttitle=\large, top=10pt, bottom=6.8pt, boxsep=1pt, colback=white,
-  colframe=orchidpink, 
-  colbacktitle=orchidpink,
+\begin{tcolorbox}[title=Héritage d'une classe, fonttitle=\large, top=10pt, bottom=6.8pt, boxsep=1pt, colback=white,
+  colframe=turquoise, 
+  colbacktitle=turquoise,
   coltitle=white,]
+\subsection*{{\small \underline{Principe}}}
+- Permet de créer une classe dérivée à partir d'une classe de base\\
+- Sert à réutiliser du code et à spécialiser certains comportements\\
+\vspace{-0.5em}
+\begin{lstlisting}[language=C++, showstringspaces=false, basicstyle=\normalsize , aboveskip=5pt, belowskip=0pt]
+// Classe de base
+class Base {
+public:
+    void afficher() const { std::cout << "Base\n"; }
+};
+// Classe derivee
+class Derivee : public Base {
+    // herite de la methode afficher()
+};
+\end{lstlisting}
+\vspace{-0.5em}
+\subsection*{{\small \underline{Modes d'héritage}}}
+\begin{tabular}{|p{2cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Mode} & \textbf{Effet sur public/protected} & \textbf{Utilisation la plus courante} \\
+\hline
+\texttt{public} &
+public $\rightarrow$ public \newline protected $\rightarrow$ protected &
+Héritage classique (interfaces publiques conservées) \\
+\hline
+\texttt{protected} &
+public $\rightarrow$ protected \newline protected $\rightarrow$ protected &
+Cas rares : limitation de l'interface publique \\
+\hline
+\texttt{private} &
+public $\rightarrow$ private \newline protected $\rightarrow$ private &
+Par défaut pour \texttt{class}, encapsulation stricte \\
+\hline
+\end{tabular}
 
+\subsection*{{\small \underline{Constructeurs et destructeurs}}}
+\begin{tabular}{|p{3.5cm}|p{1.5cm}|p{7cm}|}
+\hline
+\textbf{Élément} & \textbf{Ordre} & \textbf{Particularité} \\
+\hline
+Constructeur mère & 1er & Appelé via la liste d'initialisation\\
+\hline
+Constructeur fille & 2e & Initialise les attributs propres à la fille \\
+\hline
+Destructeur fille & 1er & Appelé avant celui de la mère \\
+\hline
+Destructeur mère & 2e & Appelé automatiquement, doit être \texttt{virtual} si polymorphisme \\
+\hline
+\end{tabular}
+
+
+\begin{lstlisting}[language=C++, showstringspaces=false, basicstyle=\normalsize , aboveskip=5pt, belowskip=2.5pt]
+class Mere {
+public:
+    Mere(int x) {}   // constructeur
+    virtual ~Mere() {}  // destructeur
+};
+class Fille : public Mere {
+public:
+    Fille(int x, int y)
+        : Mere(x), val(y) {} // appel explicite
+    ~Fille() override {}   // destructeur de la fille
+private:
+    int val;
+};
+\end{lstlisting}
 \end{tcolorbox}
 \end{minipage}
 \hfill
@@ -138,11 +206,11 @@ class Livre {
 private:
   std::string titre;
 public:
-  Livre(std::string t) : titre(t) {
+ Livre(std::string t) : titre(t) {
       std::cout<<"Livre cree : "<<titre<<std::endl;
     }
-  ~Livre() {
-      std::cout<<"Livre detruit : "<<titre<<std::endl;
+ ~Livre() {
+     std::cout<<"Livre detruit : "<<titre<<std::endl;
     }
 };
 \end{lstlisting}
@@ -154,6 +222,8 @@ public:
   coltitle=white,]
 
 \subsection*{{\small \underline{Principe général}}}
+- Permet de rendre le code plus lisible, maintenable et modulable\\
+
 \begin{tabular}{|p{2cm}|p{4.5cm}|p{5cm}|}
 \hline
 \textbf{Fichier} & \textbf{Contenu} & \textbf{Rôle} \\
@@ -195,6 +265,165 @@ int main() {
     Livre l("1984", "George Orwell");
     l.afficher();
 \end{lstlisting}
+\end{tcolorbox}
+\end{minipage}
+\newpage
+\vspace*{-2em}
+\noindent
+\begin{minipage}[t]{0.5\textwidth}
+\vspace{0pt}
+\begin{tcolorbox}[title=Surcharge d'opérateurs, fonttitle=\large, top=0pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=tale, 
+  colbacktitle=tale,
+  coltitle=white,]
+  \vspace{0.5em}
+\subsection*{{\small \underline{Principe général}}}
+- Technique qui permet de réaliser des opérations mathématiques intelligentes entre les objets d'une classe\\
+
+\begin{tabular}{|p{2cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Catégorie} & \textbf{Exemple / Syntaxe} & \textbf{Remarques} \\
+\hline
+Opérateurs binaires &\texttt{Point operator+(const Point\& p) const\{ return Point(x + p.x, y + p.y);\}} & Peut être défini comme méthode ou fonction \texttt{friend} \\
+\hline
+Opérateurs unaires & \texttt{Point\& operator++()} & Incrémente l’objet, peut être préfixe ou postfixe \\
+\hline
+Opérateur d'affectation & \texttt{Point\& operator=(const Point\& p);} & Doit retourner une référence à l’objet (\texttt{Classe\&}) \\
+\hline
+Opérateurs de comparaison & \texttt{bool operator==(const Point\& p) const \{ return x==p.x \&\& y==p.y; \}} & Permet de comparer deux objets de la classe \\
+\hline
+Opérateurs flux & \texttt{friend std::ostream\& operator<<(std::ostream\& os, const Point\& p);} & Pour afficher l’objet avec \texttt{cout} ; friend si l’opérateur n’est pas membre \\
+\hline
+Exemple concret & \texttt{Point a(1,2), b(3,4); Point c = a + b;} & Utilise \texttt{operator+}, \texttt{operator==} et \texttt{operator<<} \\
+\hline
+\end{tabular}
+  \vspace{-1em}
+\subsection*{{\small \underline{Points importants}}}
+\begin{itemize}
+    \item Les opérateurs arithmétiques doivent retourner un nouvel objet.\\
+\vspace{-0.75em}
+    \item Les opérateurs d'affectation arithmétiques (+=, -=) retournent une référence à \texttt{*this}.
+\vspace{0.3em}
+    \item Les opérateurs de flux \texttt{<<} et \texttt{>>} doivent être \texttt{friend} pour accéder aux attributs privés.
+\vspace{0.3em}
+    \item La surcharge ne crée pas de nouveaux opérateurs : elle redéfinit leur comportement.
+\end{itemize}
+\end{tcolorbox}
+\begin{tcolorbox}[title=Chaînes de caractères, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe= orange!30!pink, 
+  colbacktitle=orange!30!pink,
+  coltitle=white,]
+
+ \vspace{-0.2em}
+\subsection*{{\small \underline{Héritage}}}
+L'héritage est un mécanisme de la programmation orientée objet permettant à une classe (\textbf{classe dérivée}) de réutiliser, d'étendre ou de modifier les comportements d'une autre classe (\textbf{classe de base}).  
+Il permet :\\
+ \vspace{-0.3em}
+\begin{itemize}
+    \item la réutilisation du code ;
+    \item la spécialisation des comportements ;
+    \item une modélisation hiérarchique.
+\end{itemize}
+
+\begin{lstlisting}[language=C++, showstringspaces=false, basicstyle=\normalsize , aboveskip=2pt, belowskip=0pt]
+// Classe de base
+class Livre {
+protected:
+    std::string titre;
+    std::string auteur;
+}
+// Classe derivee
+class Roman : public Livre {
+private:
+    std::string genre;
+}
+\end{lstlisting}
+ \vspace{-0.8em}
+\subsection*{{\small \underline{Types d'héritages}}}
+ \vspace{-0.2em}
+\begin{tabular}{|p{1.5cm}|p{4.5cm}|p{6cm}|}
+\hline
+\textbf{Type} & \textbf{Exemple} & \textbf{Effet} \\
+\hline
+Public 
+& \texttt{class Roman : public Livre} 
+& Les membres publics et protégés de la classe de base conservent leur visibilité dans la classe dérivée. Relation "est un". \\
+\hline
+Protégé 
+& \texttt{class Roman : protected Livre} 
+& Les membres publics et protégés de la base deviennent \textit{protégés} dans la dérivée. Visibilité réduite mais héritage toujours actif. \\
+\hline
+Privé 
+& \texttt{class Roman : private Livre} 
+& Tous les membres hérités deviennent \textit{privés} dans la dérivée. L’héritage ne représente plus une relation "est un" publiquement. \\
+\hline
+\end{tabular}
+ \vspace{-1.2em}
+\subsection*{{\small \underline{Héritage multiple}}}
+C++ autorise l'héritage multiple.
+\begin{lstlisting}[language=C++, showstringspaces=false, basicstyle=\normalsize , aboveskip=5pt, belowskip=0pt]
+class A { };
+class B { };
+class C : public A, public B { };
+\end{lstlisting}
+\end{tcolorbox}
+\end{minipage}
+\hfill
+  \begin{minipage}[t]{0.49\textwidth}
+\vspace{0pt}
+  \begin{tcolorbox}[title=Association de classes et pointeurs, fonttitle=\large, top=5pt, bottom=0pt, boxsep=1pt, colback=white,
+  colframe=blue!45!black, 
+  colbacktitle=blue!45!black,
+  coltitle=white,]
+\subsection*{{\small \underline{Principe général}}}
+- Sert à relier des objets sans les copier, à permettre le polymorphisme et à maîtriser la durée de vie des objets\\
+
+- Contrairement à la composition, les objets associés ne sont pas créés ni détruits automatiquement par la classe qui les utilise
+  \vspace{-0.5em}
+\subsection*{{\small \underline{Utilisation de pointeurs}}}
+En C++, l'association se fait généralement via :
+\begin{itemize}
+\item un pointeur brut (\texttt{*Type})
+\item un pointeur intelligent (\texttt{std::shared\_ptr})
+\item une référence (\texttt{Type\&})
+\end{itemize}
+\begin{lstlisting}[language=C++, showstringspaces=false, basicstyle=\normalsize , aboveskip=5pt, belowskip=0pt]
+class Auteur {...}
+class Livre {...}
+int main() {
+    Auteur a("Victor Hugo"); 
+    Livre l("Les Miserables", \&a); 
+    l.afficher();
+    return 0;
+}
+\end{lstlisting}
+\vspace{-0.5em}
+\subsection*{{\small \underline{Types d'associations}}}
+\begin{tabular}{|p{3cm}|p{2.5cm}|p{6cm}|}
+\hline
+\textbf{Type d'association} & \textbf{Notation} & \textbf{Description} \\
+\hline
+1--1 & \texttt{A -> B} & Un objet est lié à un seul autre objet : \texttt{Car* car;} dans \texttt{Person} \\
+\hline
+1--N & \texttt{A -> \{B\}} & Un objet est lié à plusieurs objets : \texttt{std::vector<Car*> cars;} \\
+\hline
+N--N & \texttt{\{A\} <-> \{B\}} & Relation multiple mutuelle (bidirectionnelle): \texttt{Teacher <-> Student}. \\
+\hline
+\end{tabular}
+
+\vspace{-0.5em}
+\subsection*{{\small \underline{Pointeurs intelligents}}}
+\begin{tabular}{|p{3.5cm}|p{2cm}|p{6cm}|}
+\hline
+\textbf{Pointeur intelligent} & \textbf{Propriété} & \textbf{Utilisation / Particularités} \\
+\hline
+\texttt{std::shared\_ptr} & Partagée & Plusieurs objets peuvent détenir la même ressource. Utile pour associations non exclusives. \\
+\hline
+\texttt{std::weak\_ptr} & Non-propriétaire & Utilisé pour casser les cycles \texttt{shared\_ptr}. Accès sécurisé via \texttt{lock()}. \\
+\hline
+\texttt{std::unique\_ptr} & Exclusive & Une seule entité possède l'objet. Plus proche de la composition que de l’association. \\
+\hline
+\end{tabular}
 \end{tcolorbox}
 \end{minipage}
 \end{document}
